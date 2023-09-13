@@ -26,20 +26,6 @@ public class JmixPmApplication {
         SpringApplication.run(JmixPmApplication.class, args);
     }
 
-    @Bean
-    @Primary
-    @ConfigurationProperties("main.datasource")
-    DataSourceProperties dataSourceProperties() {
-        return new DataSourceProperties();
-    }
-
-    @Bean
-    @Primary
-    @ConfigurationProperties("main.datasource.hikari")
-    DataSource dataSource(DataSourceProperties dataSourceProperties) {
-        return dataSourceProperties.initializeDataSourceBuilder().build();
-    }
-
     @EventListener
     public void printApplicationUrl(ApplicationStartedEvent event) {
         LoggerFactory.getLogger(JmixPmApplication.class).info("Application started at "

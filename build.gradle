@@ -1,6 +1,7 @@
 plugins {
     id 'io.jmix' version '1.5.3'
     id 'java'
+    id 'com.palantir.docker' version '0.30.0'
 }
 
 apply plugin: 'org.springframework.boot'
@@ -44,6 +45,23 @@ dependencies {
     implementation 'org.postgresql:postgresql'
 
     implementation 'io.jmix.translations:jmix-translations-fr'
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-vault-config:3.1.1'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    implementation "org.springframework.boot:spring-boot-starter-undertow"
+    modules {
+        module("org.springframework.boot:spring-boot-starter-tomcat") {
+            replacedBy("org.springframework.boot:spring-boot-starter-undertow", "Use Undertow instead of Apache Tomcat")
+        }
+    }
+}
+
+docker {
+    dependsOn(tasks.bootJar)
+    name "$rootProject.name:$version"
+    dockerfile file('docker/Dockerfile')
+    files tasks.bootJar.outputs
 }
 
 test {
