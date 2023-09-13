@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  web:
+    image: jmixtest/jmix-pm:latest
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+
+  postgres:
+    image: postgres:alpine
+    environment:
+      POSTGRES_DB: 2023-08-jmix-pm-dev
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
