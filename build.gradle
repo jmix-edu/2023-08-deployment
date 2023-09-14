@@ -49,6 +49,8 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-vault-config:3.1.1'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+    implementation 'com.hazelcast:hazelcast'
+
     implementation "org.springframework.boot:spring-boot-starter-undertow"
     modules {
         module("org.springframework.boot:spring-boot-starter-tomcat") {
@@ -60,8 +62,12 @@ dependencies {
 docker {
     dependsOn(tasks.bootJar)
     name "$rootProject.name:$version"
-    dockerfile file('docker/Dockerfile')
+    dockerfile file('docker/Dockerfile.layered')
     files tasks.bootJar.outputs
+}
+
+bootBuildImage {
+    imageName = "jmix_pm_boot_image"
 }
 
 test {
