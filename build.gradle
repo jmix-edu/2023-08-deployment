@@ -50,6 +50,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     implementation 'com.hazelcast:hazelcast'
+    implementation 'com.hazelcast:hazelcast-kubernetes:2.2.3'
 
     implementation "org.springframework.boot:spring-boot-starter-undertow"
     modules {

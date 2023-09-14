@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jmixpm-db-config
+data:
+  db_user: postgres
+  db_password: postgres
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jmixpm-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jmixpm-db
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: jmixpm-db
+    spec:
+      containers:
+        - image: postgres:alpine
+          name: jmixpm-db
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: jmixpm-db-config
+                  key: db_user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: jmixpm-db-config
+                  key: db_password
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+            - name: POSTGRES_DB
+              value: pm-deployment-advanced
+          ports:
+            - containerPort: 5432
+              name: jmixpm-db
+      volumes:
+        - name: jmixpm-db-storage
+          persistentVolumeClaim:
+            claimName: jmixpm-db-pvclaim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jmixpm-db-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+  selector:
+    app: jmixpm-db

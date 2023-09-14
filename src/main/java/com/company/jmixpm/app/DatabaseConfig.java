@@ -18,7 +18,7 @@ public class DatabaseConfig {
     }
 
     @Primary
-    @Profile("default")
+    @Profile({"default", "k8s"})
     @Bean("dataSourceProperties")
     @ConfigurationProperties("main.datasource")
     DataSourceProperties dataSourceProperties() {
